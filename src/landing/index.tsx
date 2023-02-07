@@ -10,6 +10,8 @@ import {
 import { db, firebaseAuth } from "src/utils/firebaseAuth";
 import JSConfetti from "js-confetti";
 import { setDoc, doc } from "firebase/firestore";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import CountDown from "./Countdown";
 
 interface user {
 	displayname: string;
@@ -135,7 +137,9 @@ const LandingPage = () => {
 				<h3 className="text-2xl text-gray-400 text-opacity-75">
 					enter by midnight, 2/12
 				</h3>
-				{/* TODO: countdown clock  */}
+				{/* countdown clock  */}
+				{/* <CountDown /> */}
+
 				{/* images */}
 				{(!displayForm || submitting === "success") && (
 					<>
@@ -144,19 +148,21 @@ const LandingPage = () => {
 								<img
 									src="./assets/images/3.png"
 									alt="yale"
-									className="w-64 h-64"
+									className="z-40 w-64 h-64"
 								/>
 							)}
 							{!img && (
 								<img
 									src="./assets/images/4.png"
 									alt="yale"
-									className="w-64 h-64"
+									className="z-40 w-64 h-64"
 								/>
 							)}
 						</div>
+
 						<h3 className="text-2xl font-bold text-gray-400 text-opacity-80">
-							{crushCount ?? '376'} crushes submitted
+							{!crushCount || crushCount === 0 ? "376" : crushCount} crushes
+							submitted
 						</h3>
 					</>
 				)}
@@ -262,7 +268,10 @@ const LandingPage = () => {
 					{submitting == "success" && (
 						<span className="pt-1 text-center text-blue-500 text-md">
 							🎉 successfully submitted your crush(es)! <br />
-							you&apos;ll be notified (or not) after the 12th
+							you&apos;ll be notified (or not) after the 12th.
+							<br />
+							<br />
+							submitting more than once overrides previous entries.
 						</span>
 					)}
 				</div>
