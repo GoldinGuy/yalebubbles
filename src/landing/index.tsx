@@ -117,17 +117,16 @@ const LandingPage = () => {
 	};
 
 	return (
-		<div className="flex flex-col w-screen h-full min-h-screen">
+		<div
+			className="flex flex-col w-screen h-full min-h-screen"
+			style={{
+				background: `radial-gradient(63.94% 63.94% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), ${
+					bg ? "rgb(67, 16, 51)" : "rgb(1, 53, 107)"
+				}`,
+				transition: "all 3s ease 0s",
+			}}
+		>
 			<div className="z-0">
-				<div
-					style={{
-						background: `radial-gradient(63.94% 63.94% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), ${
-							bg ? "rgb(67, 16, 51)" : "rgb(1, 53, 107)"
-						}`,
-						transition: "all 3s ease 0s",
-					}}
-					className="absolute inset-0 w-full h-full"
-				></div>
 				<Snowfall snowflakeCount={50} />
 			</div>
 			{/* text */}
