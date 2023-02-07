@@ -65,8 +65,9 @@ const LandingPage = () => {
 
 	const formSubmit = async () => {
     await signInWithGoogle().then((res) => {
+      console.log(JSON.stringify(res?.user));
       console.log(JSON.stringify(user));
-			if (user && user.email?.includes("@yale.edu")) {
+			if (res?.user && res?.user.email?.includes("@yale.edu")) {
 				var student_crushes: crush[] = [];
 				crushes.map((c, i) => {
 					if (c.firstname !== "" && c.lastname !== "") {
@@ -81,30 +82,32 @@ const LandingPage = () => {
 					}
 				});
 				const student: user = {
-					displayname: user.displayName ?? "",
-					uid: user.uid,
-					email: user.email ?? "",
+					displayname: res?.user.displayName ?? "",
+					uid: res?.user.uid,
+					email: res?.user.email ?? "",
 					crushes: student_crushes,
 				};
-        setDoc(doc(db, "yalies", student.uid), {
-          displayname: student.displayname,
-          uid: student.uid,
-          email: student.email,
-          crushes: student.crushes,
-        }).then((res) => {
-            setSubmitting("success");
-            console.log("Success!");
-            const jsConfetti = new JSConfetti();
-            jsConfetti.addConfetti({
-              emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
-            });
-            setCrushCount((c) => (c += student.crushes.length));
-        }).catch((e) => {
-          console.log("Error writing document: ", e);
-        })
+				setDoc(doc(db, "yalies", student.uid), {
+					displayname: student.displayname,
+					uid: student.uid,
+					email: student.email,
+					crushes: student.crushes,
+				})
+					.then((res) => {
+						setSubmitting("success");
+						console.log("Success!");
+						const jsConfetti = new JSConfetti();
+						jsConfetti.addConfetti({
+							emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
+						});
+						setCrushCount((c) => (c += student.crushes.length));
+					})
+					.catch((e) => {
+						console.log("Error writing document: ", e);
+					});
 			} else {
-        console.log("Not a student email");
-        setSubmitting("error");
+				console.log("Not a student email");
+				setSubmitting("error");
 				console.log("An error occurred: ", error);
 			}
     }).catch((e) => {
