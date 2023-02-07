@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Snowfall from "react-snowfall";
 import useInterval from "src/utils/useInterval";
 import {
-  useAuthState,
+	useAuthState,
 	useSignInWithApple,
 	useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
@@ -22,29 +22,28 @@ interface user {
 
 type crush = {
 	firstname: string;
-  lastname: string;
-  email?: string;
+	lastname: string;
+	email?: string;
 };
 
 const LandingPage = () => {
 	const [bg, setBg] = useState(false);
 	const [img, setImg] = useState(false);
-	const [signInWithGoogle, loading, error] =
-    useSignInWithGoogle(firebaseAuth);
-  const [user] = useAuthState(firebaseAuth);
-  const [submitting, setSubmitting] = useState("start");
-  const [crushCount, setCrushCount] = useState(0);
+	const [signInWithGoogle, loading, error] = useSignInWithGoogle(firebaseAuth);
+	const [user] = useAuthState(firebaseAuth);
+	const [submitting, setSubmitting] = useState("start");
+	const [crushCount, setCrushCount] = useState(0);
 
-  useEffect(() => {
-    if (crushCount === 0) {
-      fetch("/api/get_crush_count")
-        .then((response) => response.json())
-        .then((response) => {
-          setCrushCount(response.count)
-        }).catch((error) => console.log(error)
-        )
-    }
-  }, [crushCount]);
+	useEffect(() => {
+		if (crushCount === 0) {
+			fetch("/api/get_crush_count")
+				.then((response) => response.json())
+				.then((response) => {
+					setCrushCount(response.count);
+				})
+				.catch((error) => console.log(error));
+		}
+	}, [crushCount]);
 
 	useInterval(() => {
 		setBg((b) => !b);
@@ -65,56 +64,53 @@ const LandingPage = () => {
 	]);
 
 	const formSubmit = async () => {
-    await signInWithGoogle();
-    console.log(JSON.stringify(user))
-    if (user && user.email?.includes("@yale.edu")) {
-      var student_crushes: crush[] = [];
-      crushes.map((c, i) => {
-        if (c.firstname !== "" && c.lastname !== "") {
-          let cleanedCrush: crush = {
-            firstname: c.firstname.toLowerCase().trim(),
-            lastname: c.lastname.toLowerCase().trim(),
-          }
-          cleanedCrush["email"] = `${cleanedCrush.firstname}.${cleanedCrush.lastname}@yale.edu`;
-          student_crushes.push(cleanedCrush);
-        }
-      });
-      const student: user = {
-        displayname: user.displayName ?? "",
-        uid: user.uid,
-        email: user.email ?? "",
-        crushes: student_crushes,
-      };
-      try {
-          const res = await setDoc(doc(db, "yalies", student.uid), {
-                    displayname: student.displayname,
-                    uid: student.uid,
-                    email: student.email,
-                    crushes: student.crushes,
-          });
-          setSubmitting("success");
-					console.log("Success!");
-					const jsConfetti = new JSConfetti();
-					jsConfetti.addConfetti({
-						emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
-          });
-          setCrushCount((c) => c += student.crushes.length)
-					return;
-      } catch (e) {
+    await signInWithGoogle().then((res) => {
+      console.log(JSON.stringify(user));
+			if (user && user.email?.includes("@yale.edu")) {
+				var student_crushes: crush[] = [];
+				crushes.map((c, i) => {
+					if (c.firstname !== "" && c.lastname !== "") {
+						let cleanedCrush: crush = {
+							firstname: c.firstname.toLowerCase().trim(),
+							lastname: c.lastname.toLowerCase().trim(),
+						};
+						cleanedCrush[
+							"email"
+						] = `${cleanedCrush.firstname}.${cleanedCrush.lastname}@yale.edu`;
+						student_crushes.push(cleanedCrush);
+					}
+				});
+				const student: user = {
+					displayname: user.displayName ?? "",
+					uid: user.uid,
+					email: user.email ?? "",
+					crushes: student_crushes,
+				};
+        setDoc(doc(db, "yalies", student.uid), {
+          displayname: student.displayname,
+          uid: student.uid,
+          email: student.email,
+          crushes: student.crushes,
+        }).then((res) => {
+            setSubmitting("success");
+            console.log("Success!");
+            const jsConfetti = new JSConfetti();
+            jsConfetti.addConfetti({
+              emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
+            });
+            setCrushCount((c) => (c += student.crushes.length));
+        }).catch((e) => {
           console.log("Error writing document: ", e);
-      }
-      // const res = await fetch(`/api/submit_crushes`, {
-			// 	method: "POST",
-			// 	headers: {
-			// 		"Content-Type": "application/json",
-			// 	},
-			// 	body: JSON.stringify(student),
-			// });
-    } else {
-      console.log("Not a student email");
-    }
-		setSubmitting("error");
-		console.log("An error occurred: ", error);
+        })
+			} else {
+        console.log("Not a student email");
+        setSubmitting("error");
+				console.log("An error occurred: ", error);
+			}
+    }).catch((e) => {
+      setSubmitting("error");
+			console.log("An error occurred: ", error);
+    })
 	};
 
 	return (
@@ -208,7 +204,7 @@ const LandingPage = () => {
 											return (
 												<div
 													key={index}
-													className="flex items-center w-full mt-3 space-around"
+													className="flex items-center justify-center w-full mt-3"
 												>
 													<p className="pr-2 text-xl">#{index + 1}</p>
 													<input

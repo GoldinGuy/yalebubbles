@@ -14,54 +14,67 @@ const Meta = (props: IMetaProps) => {
   const router = useRouter();
 
   return (
-    <>
-      <Head>
-        <meta charSet="UTF-8" key="charset" />
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1"
-          key="viewport"
-        />
-        <link
-          rel="apple-touch-icon"
-          href={`${router.basePath}/apple-touch-icon.png`}
-          key="apple"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href={`${router.basePath}/favicon-32x32.png`}
-          key="icon32"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href={`${router.basePath}/favicon-16x16.png`}
-          key="icon16"
-        />
-        <link
-          rel="icon"
-          href={`${router.basePath}/favicon.ico`}
-          key="favicon"
-        />
-        <script async defer data-website-id="289267d3-cd48-4219-9732-c84b8ee0aefa" src="https://analytics.goldin.io/umami.js"></script>
-      </Head>
-      <NextSeo
-        title={props.title}
-        description={props.description}
-        canonical={props.canonical}
-        openGraph={{
-          title: props.title,
-          description: props.description,
-          url: props.canonical,
-          locale: AppConfig.locale,
-          site_name: AppConfig.site_name,
-        }}
-      />
-    </>
-  );
+		<>
+			<Head>
+				<meta charSet="UTF-8" key="charset" />
+				<meta
+					name="viewport"
+					content="width=device-width,initial-scale=1"
+					key="viewport"
+				/>
+				<link
+					rel="apple-touch-icon"
+					href={`${router.basePath}/apple-touch-icon.png`}
+					key="apple"
+				/>
+				<link
+					rel="icon"
+					type="image/png"
+					sizes="32x32"
+					href={`${router.basePath}/favicon-32x32.png`}
+					key="icon32"
+				/>
+				<link
+					rel="icon"
+					type="image/png"
+					sizes="16x16"
+					href={`${router.basePath}/favicon-16x16.png`}
+					key="icon16"
+				/>
+				<link
+					rel="icon"
+					href={`${router.basePath}/favicon.ico`}
+					key="favicon"
+				/>
+				<meta
+					property="og:image"
+					content={`${router.basePath}/thumbnail.png`}
+				/>
+				<meta
+					property="twitter:image"
+					content={`${router.basePath}/thumbnail.png`}
+				/>
+				<script
+					async
+					defer
+					data-website-id="289267d3-cd48-4219-9732-c84b8ee0aefa"
+					src="https://analytics.goldin.io/umami.js"
+				></script>
+			</Head>
+			<NextSeo
+				title={props.title}
+				description={props.description}
+				canonical={props.canonical}
+				openGraph={{
+					title: props.title,
+					description: props.description,
+					url: props.canonical,
+					locale: AppConfig.locale,
+					site_name: AppConfig.site_name,
+				}}
+			/>
+		</>
+	);
 };
 
 export { Meta };
