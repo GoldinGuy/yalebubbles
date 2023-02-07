@@ -63,10 +63,10 @@ const LandingPage = () => {
 				{/* images */}
 				<div className="pt-6 pb-1">
 					{img && (
-						<img src="./assets/images/2.png" alt="yale" className="w-52 h-52" />
+						<img src="./assets/images/3.png" alt="yale" className="w-64 h-64" />
 					)}
 					{!img && (
-						<img src="./assets/images/1.png" alt="yale" className="w-52 h-52" />
+						<img src="./assets/images/4.png" alt="yale" className="w-64 h-64" />
 					)}
 				</div>
 				{/* TODO: update this adaptively  */}
@@ -86,7 +86,9 @@ const LandingPage = () => {
 						className="px-5 py-2 mt-6 text-2xl text-white bg-gray-700 border border-gray-100 rounded-full cursor-pointer bg-opacity-20 text-opacity-90 hover:bg-opacity-50 hover:bg-rose-500 transform hover:scale-[1.05] transition-all group"
 						onClick={() => setDisplayForm(true)}
 					>
-						<span className="filter grayscale group-hover:grayscale-0">💗 start 💗</span>
+						<span className="filter grayscale group-hover:grayscale-0">
+							💗 start 💗
+						</span>
 					</button>
 				</div>
 			</div>
