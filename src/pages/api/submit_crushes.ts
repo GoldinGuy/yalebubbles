@@ -7,15 +7,14 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  console.log("testing submit", req.body);
+  console.log("submitting: ", req.body);
   const displayname = req.body?.displayname ?? "Anonymous";
   const uid = req.body?.uid ?? "0123456789";
   const email = req.body?.email ?? "UNKNOWN";
   const crushes = req.body?.crushes ?? [];
 
-
   if (email === "UNKNOWN" || crushes.length === 0) {
-     res
+     return res
 				.status(400)
 				.json({ result: "an error occurred while adding the new user" });
   }
@@ -31,17 +30,17 @@ export default async function handler(
 	// }
 
   try {
+    
     await setDoc(doc(db, "yalies", uid), {
 			displayname: displayname,
 			uid: uid,
 			email: email,
 			crushes: crushes,
-		});
-    res.status(200)
+    });
+    return res.status(200)
       .json({ result: "successfully added new user" });
   } catch (e) {
-    res.status(400).json({ result: 'an error occurred while adding the new user' });
     console.error("Error adding document: ", e);
+    return res.status(400).json({ result: 'an error occurred while adding the new user' });
   }
-
 }

@@ -7,8 +7,9 @@ import {
 	useSignInWithApple,
 	useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
-import { firebaseAuth } from "src/utils/firebaseAuth";
+import { db, firebaseAuth } from "src/utils/firebaseAuth";
 import JSConfetti from "js-confetti";
+import { setDoc, doc } from "firebase/firestore";
 
 interface user {
 	displayname: string;
@@ -29,7 +30,19 @@ const LandingPage = () => {
 	const [signInWithGoogle, loading, error] =
     useSignInWithGoogle(firebaseAuth);
   const [user] = useAuthState(firebaseAuth);
-	const [submitting, setSubmitting] = useState("start");
+  const [submitting, setSubmitting] = useState("start");
+  const [crushCount, setCrushCount] = useState(0);
+
+  useEffect(() => {
+    if (crushCount === 0) {
+      fetch("/api/get_crush_count")
+        .then((response) => response.json())
+        .then((response) => {
+          setCrushCount(response.count)
+        }).catch((error) => console.log(error)
+        )
+    }
+  }, [crushCount]);
 
 	useInterval(() => {
 		setBg((b) => !b);
@@ -70,22 +83,31 @@ const LandingPage = () => {
         email: user.email ?? "",
         crushes: student_crushes,
       };
-      const res = await fetch(`/api/submit_crushes`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(student),
-			});
-      if (res.ok) {
-        setSubmitting("success");
-        console.log("Success!");
-        const jsConfetti = new JSConfetti();
-				jsConfetti.addConfetti({
-					emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
-				});
-        return;
+      try {
+          const res = await setDoc(doc(db, "yalies", student.uid), {
+                    displayname: student.displayname,
+                    uid: student.uid,
+                    email: student.email,
+                    crushes: student.crushes,
+          });
+          setSubmitting("success");
+					console.log("Success!");
+					const jsConfetti = new JSConfetti();
+					jsConfetti.addConfetti({
+						emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
+          });
+          setCrushCount((c) => c += student.crushes.length)
+					return;
+      } catch (e) {
+          console.log("Error writing document: ", e);
       }
+      // const res = await fetch(`/api/submit_crushes`, {
+			// 	method: "POST",
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 	},
+			// 	body: JSON.stringify(student),
+			// });
     } else {
       console.log("Not a student email");
     }
@@ -94,7 +116,7 @@ const LandingPage = () => {
 	};
 
 	return (
-		<div className="flex flex-col w-screen h-screen">
+		<div className="flex flex-col w-screen h-full min-h-screen">
 			<div className="z-0">
 				<div
 					style={{
@@ -115,7 +137,7 @@ const LandingPage = () => {
 				</h3>
 				{/* TODO: countdown clock  */}
 				{/* images */}
-				{(!displayForm || submitting === "success")&& (
+				{(!displayForm || submitting === "success") && (
 					<>
 						<div className="pt-6 pb-1">
 							{img && (
@@ -134,7 +156,7 @@ const LandingPage = () => {
 							)}
 						</div>
 						<h3 className="text-2xl font-bold text-gray-400 text-opacity-80">
-							376 crushes submitted
+							{crushCount ?? '376'} crushes submitted
 						</h3>
 					</>
 				)}
@@ -148,13 +170,13 @@ const LandingPage = () => {
 							</span>
 							<button
 								className="px-5 w-48 mx-auto py-2 mt-6 text-xl text-white bg-gray-700 border border-gray-50 border-opacity-50 rounded-full cursor-pointer bg-opacity-20 text-opacity-90 hover:bg-opacity-50 hover:bg-rose-500 transform hover:scale-[1.05] transition-all group"
-                onClick={() => {
-                  // const jsConfetti = new JSConfetti();
+								onClick={() => {
+									// const jsConfetti = new JSConfetti();
 									// jsConfetti.addConfetti({
 									// 	emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
 									// });
-                  setDisplayForm(true)
-                }}
+									setDisplayForm(true);
+								}}
 							>
 								<span className="filter grayscale group-hover:grayscale-0">
 									💗 start 💗
@@ -167,8 +189,8 @@ const LandingPage = () => {
 						<>
 							{displayForm && (
 								<div className="flex flex-col items-center justify-center">
-									<span className="pb-1 text-center">
-										enter up to 6 crushes (like on yalies.io)
+									<span className="pb-1 text-center whitespace-nowrap">
+										enter up to 6 crushes (names like yalies.io)
 									</span>
 									{/* crushes input */}
 									{crushes.map((crush, index) => {
@@ -240,7 +262,7 @@ const LandingPage = () => {
 					{submitting == "success" && (
 						<span className="pt-1 text-center text-blue-500 text-md">
 							🎉 successfully submitted your crush(es)! <br />
-							 you&apos;ll be notified (or not) after the 12th
+							you&apos;ll be notified (or not) after the 12th
 						</span>
 					)}
 				</div>
