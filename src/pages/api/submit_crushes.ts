@@ -20,15 +20,15 @@ export default async function handler(
 				.json({ result: "an error occurred while adding the new user" });
   }
 
-  const docRef = doc(db, "yalies", "student");
-	const docSnap = await getDoc(docRef);
+  // const docRef = doc(db, "yalies", "student");
+	// const docSnap = await getDoc(docRef);
 
-	if (docSnap.exists()) {
-		console.log("Document data:", docSnap.data());
-	} else {
-		// doc.data() will be undefined in this case
-		console.log("No such document!");
-	}
+	// if (docSnap.exists()) {
+	// 	console.log("Document data:", docSnap.data());
+	// } else {
+	// 	// doc.data() will be undefined in this case
+	// 	console.log("No such document!");
+	// }
 
   try {
     await setDoc(doc(db, "yalies", uid), {
@@ -37,15 +37,8 @@ export default async function handler(
 			email: email,
 			crushes: crushes,
 		});
-    // const docRef = await addDoc(collection(db, "yalies"), {
-    //   displayname: displayname,
-    //   uid: uid,
-    //   email: email,
-    //   crushes: crushes,
-    // });
     res.status(200)
       .json({ result: "successfully added new user" });
-    // console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     res.status(400).json({ result: 'an error occurred while adding the new user' });
     console.error("Error adding document: ", e);

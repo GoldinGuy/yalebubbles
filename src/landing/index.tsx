@@ -8,6 +8,7 @@ import {
 	useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
 import { firebaseAuth } from "src/utils/firebaseAuth";
+import JSConfetti from "js-confetti";
 
 interface user {
 	displayname: string;
@@ -79,6 +80,10 @@ const LandingPage = () => {
       if (res.ok) {
         setSubmitting("success");
         console.log("Success!");
+        const jsConfetti = new JSConfetti();
+				jsConfetti.addConfetti({
+					emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
+				});
         return;
       }
     } else {
@@ -106,11 +111,11 @@ const LandingPage = () => {
 			<div className="z-30 flex flex-col items-center justify-center pt-20">
 				<h1 className="text-5xl text-white text-opacity-80">the yale reveal</h1>
 				<h3 className="text-2xl text-gray-400 text-opacity-75">
-					enter by midnight, 2/11
+					enter by midnight, 2/12
 				</h3>
 				{/* TODO: countdown clock  */}
 				{/* images */}
-				{!displayForm && (
+				{(!displayForm || submitting === "success")&& (
 					<>
 						<div className="pt-6 pb-1">
 							{img && (
@@ -133,7 +138,7 @@ const LandingPage = () => {
 						</h3>
 					</>
 				)}
-				<div className="flex flex-col px-6 py-6 mt-6 text-gray-400 bg-gray-400 md:px-10 rounded-xl w-96 bg-opacity-10">
+				<div className="flex flex-col w-full px-6 py-6 mt-6 text-gray-400 bg-gray-400 md:px-10 md:rounded-xl md:w-96 bg-opacity-10">
 					{/* info */}
 					{!displayForm && (
 						<div className="flex flex-col items-center justify-center text-center">
@@ -143,7 +148,13 @@ const LandingPage = () => {
 							</span>
 							<button
 								className="px-5 w-48 mx-auto py-2 mt-6 text-xl text-white bg-gray-700 border border-gray-50 border-opacity-50 rounded-full cursor-pointer bg-opacity-20 text-opacity-90 hover:bg-opacity-50 hover:bg-rose-500 transform hover:scale-[1.05] transition-all group"
-								onClick={() => setDisplayForm(true)}
+                onClick={() => {
+                  // const jsConfetti = new JSConfetti();
+									// jsConfetti.addConfetti({
+									// 	emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
+									// });
+                  setDisplayForm(true)
+                }}
 							>
 								<span className="filter grayscale group-hover:grayscale-0">
 									💗 start 💗
@@ -157,7 +168,7 @@ const LandingPage = () => {
 							{displayForm && (
 								<div className="flex flex-col items-center justify-center">
 									<span className="pb-1 text-center">
-										enter up to 6 crushes (names as on yalies.io)
+										enter up to 6 crushes (like on yalies.io)
 									</span>
 									{/* crushes input */}
 									{crushes.map((crush, index) => {
@@ -227,9 +238,9 @@ const LandingPage = () => {
 						</>
 					)}
 					{submitting == "success" && (
-						<span className="pt-1 text-sm italic text-center text-blue-500">
-							successfully submitted your crushe(s)! you&apos;ll be notified (or
-							not) after the 11th
+						<span className="pt-1 text-center text-blue-500 text-md">
+							🎉 successfully submitted your crush(es)! <br />
+							 you&apos;ll be notified (or not) after the 12th
 						</span>
 					)}
 				</div>
