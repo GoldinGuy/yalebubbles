@@ -74,12 +74,19 @@ const LandingPage = () => {
 					376 crushes submitted
 				</h3>
 				{/* form */}
-				<div className="py-6">
+				<div className="flex flex-col px-10 py-6 mt-6 text-gray-400 bg-gray-400 rounded-xl w-96 bg-opacity-10">
+					{/* <span className='pb-2 font-bold text-center'>
+						info
+					</span> */}
+					<span>
+						if you and your crush list each other, we&apos;ll notify you both!
+						if not, nothing happens.
+					</span>
 					<button
-						className="px-5 py-3 text-2xl text-white bg-gray-700 border border-gray-100 rounded-full bg-opacity-20 text-opacity-90"
+						className="px-5 py-2 mt-6 text-2xl text-white bg-gray-700 border border-gray-100 rounded-full cursor-pointer bg-opacity-20 text-opacity-90 hover:bg-opacity-50 hover:bg-rose-500 transform hover:scale-[1.05] transition-all group"
 						onClick={() => setDisplayForm(true)}
 					>
-						<span className="filter grayscale">💗 start 💗</span>
+						<span className="filter grayscale group-hover:grayscale-0">💗 start 💗</span>
 					</button>
 				</div>
 			</div>
