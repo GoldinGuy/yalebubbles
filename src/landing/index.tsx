@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useInterval from "src/utils/useInterval";
 
 interface user {
 	displayname: string;
@@ -15,6 +14,9 @@ type crush = {
 };
 
 const LandingPage = () => {
+
+  const rdN = (Math.floor(Math.random() * 9) + 1) ?? 1;
+  const rdI = rdN + '.png';
 
 	return (
 		<div className="flex flex-col w-screen h-full min-h-screen">
@@ -87,7 +89,7 @@ const LandingPage = () => {
 				{/* images */}
 				<div className="pt-6 pb-3 md:pt-10 md:pb-6">
 					<img
-						src={`./assets/images/${(Math.floor(Math.random() * 9) + 1) ?? 1}.png`}
+						src={`./assets/images/${rdI}`}
 						alt="yale"
 						className="z-40 rounded w-80 h-80"
 					/>
