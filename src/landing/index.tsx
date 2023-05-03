@@ -15,8 +15,11 @@ type crush = {
 
 const LandingPage = () => {
 
-  const rdN = (Math.floor(Math.random() * 9) + 1) ?? 1;
-  const rdI = rdN + '.png';
+  const [randomNumber, setRandomNumber] = useState<number>(1);
+
+  useEffect(() => {
+    setRandomNumber(Math.floor(Math.random() * 9) + 1);
+  }, []);
 
 	return (
 		<div className="flex flex-col w-screen h-full min-h-screen">
@@ -89,7 +92,7 @@ const LandingPage = () => {
 				{/* images */}
 				<div className="pt-6 pb-3 md:pt-10 md:pb-6">
 					<img
-						src={`./assets/images/${rdI}`}
+						src={`./assets/images/${randomNumber}.png`}
 						alt="yale"
 						className="z-40 rounded w-80 h-80"
 					/>
