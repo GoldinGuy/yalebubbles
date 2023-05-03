@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { Gradient } from './Gradient';
-import Snowfall from "react-snowfall";
 import useInterval from "src/utils/useInterval";
-import {
-	useAuthState,
-	useSignInWithApple,
-	useSignInWithGoogle,
-} from "react-firebase-hooks/auth";
-import { db, firebaseAuth } from "src/utils/firebaseAuth";
-import JSConfetti from "js-confetti";
-import { setDoc, doc } from "firebase/firestore";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import CountDown from "./Countdown";
 
 interface user {
 	displayname: string;
@@ -27,251 +15,396 @@ type crush = {
 };
 
 const LandingPage = () => {
-	const [bg, setBg] = useState(false);
-	const [img, setImg] = useState(false);
-	const [signInWithGoogle, loading, error] = useSignInWithGoogle(firebaseAuth);
-	const [user] = useAuthState(firebaseAuth);
-	const [submitting, setSubmitting] = useState("start");
-	const [crushCount, setCrushCount] = useState(0);
-
-	useEffect(() => {
-		if (crushCount === 0) {
-			fetch("/api/get_crush_count")
-				.then((response) => response.json())
-				.then((response) => {
-					setCrushCount(response.count);
-				})
-				.catch((error) => console.log(error));
-		}
-	}, [crushCount]);
-
-	useInterval(() => {
-		setBg((b) => !b);
-	}, 5000);
-
-	useInterval(() => {
-		setImg((i) => !i);
-	}, 1300);
-
-	const [displayForm, setDisplayForm] = useState(false);
-	const [crushes, setCrushes] = useState<crush[]>([
-		{ firstname: "", lastname: "" },
-		{ firstname: "", lastname: "" },
-		{ firstname: "", lastname: "" },
-		{ firstname: "", lastname: "" },
-		{ firstname: "", lastname: "" },
-		{ firstname: "", lastname: "" },
-	]);
-
-	const formSubmit = async () => {
-    await signInWithGoogle().then((res) => {
-      console.log(JSON.stringify(res?.user));
-      console.log(JSON.stringify(user));
-			if (res?.user && res?.user.email?.includes("@yale.edu")) {
-				var student_crushes: crush[] = [];
-				crushes.map((c, i) => {
-					if (c.firstname !== "" && c.lastname !== "") {
-						let cleanedCrush: crush = {
-							firstname: c.firstname.toLowerCase().trim(),
-							lastname: c.lastname.toLowerCase().trim(),
-						};
-						cleanedCrush[
-							"email"
-						] = `${cleanedCrush.firstname}.${cleanedCrush.lastname}@yale.edu`;
-						student_crushes.push(cleanedCrush);
-					}
-				});
-				const student: user = {
-					displayname: res?.user.displayName ?? "",
-					uid: res?.user.uid,
-					email: res?.user.email ?? "",
-					crushes: student_crushes,
-				};
-				setDoc(doc(db, "yalies", student.uid), {
-					displayname: student.displayname,
-					uid: student.uid,
-					email: student.email,
-					crushes: student.crushes,
-				})
-					.then((res) => {
-						setSubmitting("success");
-						console.log("Success!");
-						const jsConfetti = new JSConfetti();
-						jsConfetti.addConfetti({
-							emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
-						});
-						setCrushCount((c) => (c += student.crushes.length));
-					})
-					.catch((e) => {
-						console.log("Error writing document: ", e);
-					});
-			} else {
-				console.log("Not a student email");
-				setSubmitting("error");
-				console.log("An error occurred: ", error);
-			}
-    }).catch((e) => {
-      setSubmitting("error");
-			console.log("An error occurred: ", error);
-    })
-	};
 
 	return (
-		<div
-			className="flex flex-col w-screen h-full min-h-screen"
-			style={{
-				background: `radial-gradient(63.94% 63.94% at 50% 0%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 100%), ${
-					bg ? "rgb(67, 16, 51)" : "rgb(1, 53, 107)"
-				}`,
-				transition: "all 3s ease 0s",
-			}}
-		>
-			<div className="z-0">
-				<Snowfall snowflakeCount={50} />
+		<div className="flex flex-col w-screen h-full min-h-screen">
+			<div className="absolute z-0">
+				<div className=" canvas">
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+					<div className="bubble"></div>
+				</div>
 			</div>
 			{/* text */}
 			<div className="z-30 flex flex-col items-center justify-center pt-20">
-				<h1 className="text-5xl text-white text-opacity-80">the yale reveal</h1>
-				<h3 className="text-2xl text-gray-400 text-opacity-75">
-					enter by midnight, 2/12
+				<a
+					href="https://www.instagram.com/yalebubbles/"
+					className="text-5xl text-white text-opacity-90 hover:text-gray-200"
+				>
+					@yalebubbles
+				</a>
+				<h3 className="text-2xl text-gray-100 md:text-3xl text-opacity-80">
+					yale&apos;s premier bubbler for hire
 				</h3>
-				{/* countdown clock  */}
-				{/* <CountDown /> */}
 
 				{/* images */}
-				{(!displayForm || submitting === "success") && (
-					<>
-						<div className="pt-6 pb-1">
-							{img && (
-								<img
-									src="./assets/images/3.png"
-									alt="yale"
-									className="z-40 w-64 h-64"
-								/>
-							)}
-							{!img && (
-								<img
-									src="./assets/images/4.png"
-									alt="yale"
-									className="z-40 w-64 h-64"
-								/>
-							)}
-						</div>
+				<div className="pt-6 pb-3 md:pt-10 md:pb-6">
+					<img
+						src="./assets/images/1.png"
+						alt="yale"
+						className="z-40 rounded w-80 h-80"
+					/>
 
-						<h3 className="text-2xl font-bold text-gray-400 text-opacity-80">
-							{!crushCount || crushCount === 0 ? "376" : crushCount} crushes
-							submitted
-						</h3>
-					</>
-				)}
-				<div className="flex flex-col w-full px-6 py-6 mt-6 text-gray-400 bg-gray-400 md:px-10 md:rounded-xl md:w-96 bg-opacity-10">
-					{/* info */}
-					{!displayForm && (
-						<div className="flex flex-col items-center justify-center text-center">
-							<span>
-								if you and your crush list each other, we&apos;ll notify you
-								both! if not, nothing happens.
-							</span>
-							<button
-								className="px-5 w-48 mx-auto py-2 mt-6 text-xl text-white bg-gray-700 border border-gray-50 border-opacity-50 rounded-full cursor-pointer bg-opacity-20 text-opacity-90 hover:bg-opacity-50 hover:bg-rose-500 transform hover:scale-[1.05] transition-all group"
-								onClick={() => {
-									// const jsConfetti = new JSConfetti();
-									// jsConfetti.addConfetti({
-									// 	emojis: ["💙", "💗", "💙", "💜", "❤️", "♥️", "💘", "🤍"],
-									// });
-									setDisplayForm(true);
+					{/* <blockquote
+						className="instagram-media"
+						data-instgrm-permalink="https://www.instagram.com/p/Crn7OGIua34/?utm_source=ig_embed&utm_campaign=loading"
+						data-instgrm-version={14}
+						style={{
+							background: "#FFF",
+							border: 0,
+							borderRadius: 3,
+							boxShadow:
+								"0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)",
+							margin: 1,
+							maxWidth: 540,
+							minWidth: 326,
+							padding: 0,
+							width: "calc(100% - 2px)",
+						}}
+					>
+						<div style={{ padding: 16 }}>
+							{" "}
+              <a
+                rel="noreferrer"
+								href="https://www.instagram.com/p/Crn7OGIua34/?utm_source=ig_embed&utm_campaign=loading"
+								style={{
+									background: "#FFFFFF",
+									lineHeight: 0,
+									padding: "0 0",
+									textAlign: "center",
+									textDecoration: "none",
+									width: "100%",
+								}}
+								target="_blank"
+							>
+								{" "}
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "row",
+										alignItems: "center",
+									}}
+								>
+									{" "}
+									<div
+										style={{
+											backgroundColor: "#F4F4F4",
+											borderRadius: "50%",
+											flexGrow: 0,
+											height: 40,
+											marginRight: 14,
+											width: 40,
+										}}
+									/>{" "}
+									<div
+										style={{
+											display: "flex",
+											flexDirection: "column",
+											flexGrow: 1,
+											justifyContent: "center",
+										}}
+									>
+										{" "}
+										<div
+											style={{
+												backgroundColor: "#F4F4F4",
+												borderRadius: 4,
+												flexGrow: 0,
+												height: 14,
+												marginBottom: 6,
+												width: 100,
+											}}
+										/>{" "}
+										<div
+											style={{
+												backgroundColor: "#F4F4F4",
+												borderRadius: 4,
+												flexGrow: 0,
+												height: 14,
+												width: 60,
+											}}
+										/>
+									</div>
+								</div>
+								<div style={{ padding: "19% 0" }} />{" "}
+								<div
+									style={{
+										display: "block",
+										height: 50,
+										margin: "0 auto 12px",
+										width: 50,
+									}}
+								>
+									<svg
+										width="50px"
+										height="50px"
+										viewBox="0 0 60 60"
+										version="1.1"
+										xmlns="https://www.w3.org/2000/svg"
+										xmlnsXlink="https://www.w3.org/1999/xlink"
+									>
+										<g
+											stroke="none"
+											strokeWidth={1}
+											fill="none"
+											fillRule="evenodd"
+										>
+											<g
+												transform="translate(-511.000000, -20.000000)"
+												fill="#000000"
+											>
+												<g>
+													<path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631" />
+												</g>
+											</g>
+										</g>
+									</svg>
+								</div>
+								<div style={{ paddingTop: 8 }}>
+									{" "}
+									<div
+										style={{
+											color: "#3897f0",
+											fontFamily: "Arial,sans-serif",
+											fontSize: 14,
+											fontStyle: "normal",
+											fontWeight: 550,
+											lineHeight: 18,
+										}}
+									>
+										View this post on Instagram
+									</div>
+								</div>
+								<div style={{ padding: "12.5% 0" }} />{" "}
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "row",
+										marginBottom: 14,
+										alignItems: "center",
+									}}
+								>
+									<div>
+										{" "}
+										<div
+											style={{
+												backgroundColor: "#F4F4F4",
+												borderRadius: "50%",
+												height: "12.5px",
+												width: "12.5px",
+												transform: "translateX(0px) translateY(7px)",
+											}}
+										/>{" "}
+										<div
+											style={{
+												backgroundColor: "#F4F4F4",
+												height: "12.5px",
+												transform:
+													"rotate(-45deg) translateX(3px) translateY(1px)",
+												width: "12.5px",
+												flexGrow: 0,
+												marginRight: 14,
+												marginLeft: 2,
+											}}
+										/>{" "}
+										<div
+											style={{
+												backgroundColor: "#F4F4F4",
+												borderRadius: "50%",
+												height: "12.5px",
+												width: "12.5px",
+												transform: "translateX(9px) translateY(-18px)",
+											}}
+										/>
+									</div>
+									<div style={{ marginLeft: 8 }}>
+										{" "}
+										<div
+											style={{
+												backgroundColor: "#F4F4F4",
+												borderRadius: "50%",
+												flexGrow: 0,
+												height: 20,
+												width: 20,
+											}}
+										/>{" "}
+										<div
+											style={{
+												width: 0,
+												height: 0,
+												borderTop: "2px solid transparent",
+												borderLeft: "6px solid #f4f4f4",
+												borderBottom: "2px solid transparent",
+												transform:
+													"translateX(16px) translateY(-4px) rotate(30deg)",
+											}}
+										/>
+									</div>
+									<div style={{ marginLeft: "auto" }}>
+										{" "}
+										<div
+											style={{
+												width: 0,
+												borderTop: "8px solid #F4F4F4",
+												borderRight: "8px solid transparent",
+												transform: "translateY(16px)",
+											}}
+										/>{" "}
+										<div
+											style={{
+												backgroundColor: "#F4F4F4",
+												flexGrow: 0,
+												height: 12,
+												width: 16,
+												transform: "translateY(-4px)",
+											}}
+										/>{" "}
+										<div
+											style={{
+												width: 0,
+												height: 0,
+												borderTop: "8px solid #F4F4F4",
+												borderLeft: "8px solid transparent",
+												transform: "translateY(-4px) translateX(8px)",
+											}}
+										/>
+									</div>
+								</div>{" "}
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										flexGrow: 1,
+										justifyContent: "center",
+										marginBottom: 24,
+									}}
+								>
+									{" "}
+									<div
+										style={{
+											backgroundColor: "#F4F4F4",
+											borderRadius: 4,
+											flexGrow: 0,
+											height: 14,
+											marginBottom: 6,
+											width: 224,
+										}}
+									/>{" "}
+									<div
+										style={{
+											backgroundColor: "#F4F4F4",
+											borderRadius: 4,
+											flexGrow: 0,
+											height: 14,
+											width: 144,
+										}}
+									/>
+								</div>
+							</a>
+							<p
+								style={{
+									color: "#c9c8cd",
+									fontFamily: "Arial,sans-serif",
+									fontSize: 14,
+									lineHeight: 17,
+									marginBottom: 0,
+									marginTop: 8,
+									overflow: "hidden",
+									padding: "8px 0 7px",
+									textAlign: "center",
+									textOverflow: "ellipsis",
+									whiteSpace: "nowrap",
 								}}
 							>
-								<span className="filter grayscale group-hover:grayscale-0">
-									💗 start 💗
-								</span>
-							</button>
+								<a
+									href="https://www.instagram.com/p/Crn7OGIua34/?utm_source=ig_embed&utm_campaign=loading"
+									style={{
+										color: "#c9c8cd",
+										fontFamily: "Arial,sans-serif",
+										fontSize: 14,
+										fontStyle: "normal",
+										fontWeight: "normal",
+										lineHeight: 17,
+										textDecoration: "none",
+                  }}
+                  rel="noreferrer"
+									target="_blank"
+								>
+									A post shared by Will Walker (@yalebubbles)
+								</a>
+							</p>
 						</div>
-					)}
-					{/* form  */}
-					{submitting != "success" && (
-						<>
-							{displayForm && (
-								<div className="flex flex-col items-center justify-center">
-									<span className="pb-1 text-center whitespace-nowrap">
-										enter up to 6 crushes (names like yalies.io)
-									</span>
-									{/* crushes input */}
-									{crushes.map((crush, index) => {
-										if (
-											index < 3 ||
-											(crushes[index - 1].firstname != "" &&
-												crushes[index - 1].lastname != "")
-										) {
-											return (
-												<div
-													key={index}
-													className="flex items-center justify-center w-full mt-3"
-												>
-													<p className="pr-2 text-xl">#{index + 1}</p>
-													<input
-														type="text"
-														id={`firstName-${index}`}
-														name="firstName"
-														placeholder="first name"
-														className="h-10 px-4 mr-2 font-semibold text-white bg-transparent border border-white rounded-full cursor-pointer w-36 border-opacity-30 focus:border-blue-400 focus:border-2"
-														onChange={(e) => {
-															setCrushes((c) => {
-																c[index].firstname = e.target.value;
-																return c;
-															});
-														}}
-														// value=""
-													/>
-													<input
-														type="text"
-														id={`lastName-${index}`}
-														placeholder="last name"
-														name="lastName"
-														className="h-10 px-4 font-semibold text-white bg-transparent border border-white rounded-full cursor-pointer w-36 border-opacity-30 focus:border-blue-400 focus:border-2"
-														onChange={(e) => {
-															setCrushes((c) => {
-																c[index].lastname = e.target.value;
-																return c;
-															});
-														}}
-														// value=""
-													/>
-												</div>
-											);
-										}
-									})}
+					</blockquote> */}
+				</div>
 
-									<button
-										className="px-5 py-2 my-5 text-xl text-white bg-gray-700 border border-gray-50 border-opacity-50  rounded-full cursor-pointer bg-opacity-20 text-opacity-90 hover:bg-opacity-50 hover:bg-blue-500 transform hover:scale-[1.05] transition-all group "
-										onClick={() => formSubmit()}
-									>
-										<span className="text-md filter grayscale group-hover:grayscale-0">
-											💙 verify and submit 💙
-										</span>
-									</button>
-									<span className="text-sm italic text-center">
-										use your yale.edu email to verify you&apos;re a student.
-										pairings are private, no data shared :)
-									</span>
-									{submitting == "error" && (
-										<span className="pt-1 text-sm italic text-center text-red-500">
-											an error occurred when submitting, please try again
-										</span>
-									)}
-								</div>
-							)}
-						</>
-					)}
-					{submitting == "success" && (
-						<span className="pt-1 text-center text-blue-500 text-md">
-							🎉 successfully submitted your crush(es)! <br />
-							you&apos;ll be notified (or not) after the 12th.
-							<br />
-							<br />
-							submitting more than once overrides previous entries.
-						</span>
-					)}
+				<div className="flex flex-col w-full px-6 py-6 mt-6 text-gray-400 bg-gray-400 md:px-10 md:rounded md:w-96 bg-opacity-10">
+					{/* info */}
+					<div className="flex flex-col items-center justify-center text-xl text-center">
+						<span>interested in having us at your next event?</span>
+						<button
+							className="px-5 w-48 mx-auto py-2 mt-6 text-xl text-white bg-gray-700 border border-gray-50 border-opacity-50 rounded cursor-pointer bg-opacity-20 text-opacity-90 hover:bg-opacity-50 hover:bg-blue-500 transform hover:scale-[1.05] transition-all group"
+							onClick={() => {
+								// const jsConfetti = new JSConfetti();
+								// jsConfetti.addConfetti({
+								// 	emojis: ["💙"],
+								// });
+								window.open(
+									"mailto:will.walker.waw35@yale.edu?subject=Yale%20Bubbles%20Inquiry"
+								);
+							}}
+						>
+							<span className="filter grayscale group-hover:grayscale-0">
+								get in touch!
+							</span>
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

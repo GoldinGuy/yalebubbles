@@ -1,6 +1,6 @@
 export const AppConfig = {
-  site_name: 'The Yale Reveal',
-  title: 'The Yale Reveal',
-  description: 'Find out if your yalie crush likes you back',
-  locale: 'en',
+	site_name: "Yale Bubbles",
+	title: "Yale Bubbles",
+	description: "yale's premier bubbler for hire!",
+	locale: "en",
 };

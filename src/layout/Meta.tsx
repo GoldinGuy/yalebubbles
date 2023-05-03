@@ -54,12 +54,12 @@ const Meta = (props: IMetaProps) => {
 					property="twitter:image"
 					content={`${router.basePath}/thumbnail.png`}
 				/>
-				<script
+				{/* <script
 					async
 					defer
 					data-website-id="289267d3-cd48-4219-9732-c84b8ee0aefa"
 					src="https://analytics.goldin.io/umami.js"
-				></script>
+				></script> */}
 			</Head>
 			<NextSeo
 				title={props.title}
