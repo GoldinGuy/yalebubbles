@@ -87,7 +87,7 @@ const LandingPage = () => {
 				{/* images */}
 				<div className="pt-6 pb-3 md:pt-10 md:pb-6">
 					<img
-						src="./assets/images/1.png"
+						src={`./assets/images/${(Math.floor(Math.random() * 9) + 1) ?? 1}.png`}
 						alt="yale"
 						className="z-40 rounded w-80 h-80"
 					/>
